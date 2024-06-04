@@ -8,8 +8,6 @@ const index = () => {
 return (
 
     <ScrollView contentContainerStyle={styles.container}>
-     <Link style={styles.subtitle} href="signin">Se connecter</Link>
-
       <Text style={styles.title}>Bienvenue chez AstonVoyage </Text>
       <Text style={styles.subtitle}>Voici nos voyages Disponible:</Text>
 
@@ -23,7 +21,7 @@ return (
           <Text style={styles.description}>
             ville marocaine
           </Text>
-          <Link style={styles.subtitle} href="detail">Voir détails</Link>
+          <Link style={styles.subtitle} href="/details">Voir détails</Link>
         </View>
 
         <View style={styles.tab}>
@@ -35,7 +33,7 @@ return (
           <Text style={styles.description}>
             ville française
           </Text>
-          <Link style={styles.subtitle} href="detail" >Voir détails</Link>
+          <Link style={styles.subtitle} href="/details">Voir détails</Link>
         </View>
 
         <View style={styles.tab}>
@@ -47,7 +45,7 @@ return (
           <Text style={styles.description}>
             Capitale de Haiti
           </Text>
-          <Link style={styles.subtitle} href="detail">Voir détails</Link>
+          <Link style={styles.subtitle} href="/details">Voir détails</Link>
         </View>
 
         <View style={styles.tab}>
@@ -59,7 +57,7 @@ return (
           <Text style={styles.description}>
             capitale de la RDC
           </Text>
-          <Link style={styles.subtitle} href="detail">Voir détails</Link>
+          <Link style={styles.subtitle} href="/details">Voir détails</Link>
         </View>
       </View>
     </ScrollView>
