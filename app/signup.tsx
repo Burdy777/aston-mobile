@@ -11,13 +11,68 @@ export default function InscriptionScreen() {
     const router = useRouter();
     const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [nom, setNom] = useState('');
+  const [prenom, setPrenom] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+
+  const handleSignUp = async () => {
+    if (password !== confirmPassword) {
+      Alert.alert('Les mot de passe ne se ressemble pas', 'Please make sure your passwords match');
+      return;
+    }
+
+    try {
+      const response = await fetch('https://backend-astonvoyage.vercel.app/api/user/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          nom: nom,
+          prenom: prenom,
+          mail: email,
+          mdp: password,
+        }),
+      });
+
+      const json = await response.json();
+
+      if (response.ok) {
+        // Inscription réussie, rediriger vers l'écran de connexion
+        Alert.alert('Success', 'Inscription Réussie');
+        router.navigate('signin');
+      } else {
+        // Gestion des erreurs d'inscription
+        Alert.alert('Inscription échoué', json.message || 'Une erreur est arrivée durant votre inscription');
+      }
+    } catch (error) {
+      Alert.alert('Error', 'Une erreur est arrivée. Veuillez revenir plus tard svp');
+    }
+  };
 
     return (
 
 <View style={styles.container}>
         <Image style={styles.img} source={require('./../assets/images/logo.png')}/>
       <Text style={styles.title}>Inscription</Text>
+      <TextInput
+        style={styles.input}
+        placeholder="nom"
+        placeholderTextColor={'#8C52FF'}
+        value={nom}
+        onChangeText={setNom}
+        keyboardType="email-address"
+        autoCapitalize="none"
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="prenom"
+        placeholderTextColor={'#8C52FF'}
+        value={prenom}
+        onChangeText={setPrenom}
+        keyboardType="email-address"
+        autoCapitalize="none"
+      />
       <TextInput
         style={styles.input}
         placeholder="Email"
@@ -43,7 +98,7 @@ export default function InscriptionScreen() {
         onChangeText={setConfirmPassword}
         secureTextEntry
       />
-      <Link style={styles.title} href="/home">S'inscrire</Link>
+      <Button title="Inscription" onPress={handleSignUp} />
       <Link style={styles.subtitle} href="/signin">Déjà inscrit? Connectez-vous</Link>
     </View>
     );

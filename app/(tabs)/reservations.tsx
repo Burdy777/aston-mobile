@@ -1,5 +1,6 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { StyleSheet, Image, Platform } from 'react-native';
+import React, { useEffect, useState } from 'react'
 
 import { Collapsible } from '@/components/Collapsible';
 import { ExternalLink } from '@/components/ExternalLink';
@@ -8,6 +9,31 @@ import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 
 export default function TabTwoScreen() {
+
+
+const [data, setData] = useState('');
+
+  useEffect(() => {  
+fetch('https://backend-astonvoyage.vercel.app/api/destination/getDest/665f221275037785ea638fe7')
+      .then((response) => {
+        console.log(response)
+        if (!response.ok) {
+          throw new Error('Erreur de connexion');
+        }
+        return response.json();
+      })
+      .then((data) => {
+        setData(data)
+        alert(data)
+        s
+        // Gérer la réponse de l'API, par exemple stocker le token JWT
+    
+      })
+      .catch((error) => {
+        console.error('NVEL Erreur:', error);
+      });
+});
+
   return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: '#D0D0D0', dark: '#353636' }}
