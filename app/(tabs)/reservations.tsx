@@ -47,8 +47,8 @@ fetch('https://backend-astonvoyage.vercel.app/api/booking/getAllBook/'+userId)
 
     <ScrollView contentContainerStyle={styles.container}>
 
-      <Text style={styles.title}>Bienvenue chez AstonVoyage </Text>
-      <Text style={styles.subtitle}>Voici nos voyages Disponible:</Text>
+      <Text style={styles.title}>Mes Réservations </Text>
+      <Text style={styles.subtitle}>Voici les voyages que vous avez reservé:</Text>
 
 {
 data.map((el:Destination) => {

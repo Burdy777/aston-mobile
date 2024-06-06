@@ -36,6 +36,8 @@ fetch('https://backend-astonvoyage.vercel.app/api/destination/getAllDest')
 return (
 
     <ScrollView contentContainerStyle={styles.container}>
+
+      
      <Link style={styles.subtitle} href="signin">Se connecter</Link>
      <Link style={styles.subtitle} href="signup">S'inscrire</Link>
 
@@ -99,23 +101,23 @@ const styles = StyleSheet.create({
   },
   tabContainer: {
     flexDirection: 'row',
-    // flexWrap: 'wrap',
-    justifyContent: 'space-between',
+     flexWrap: 'wrap',
+    justifyContent: 'space-around',
     // width: '100%',
     marginTop: 20,
   },
   tab: {
-    width: '44%',
+    width: '40%',
     backgroundColor: '#fff',
     padding: 10,
-    borderRadius: 10,
+    borderRadius: 4,
     alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.8,
-    shadowRadius: 2,
-    elevation: 5,
-    margin: 5,
+    // shadowColor: '#000',
+    // shadowOffset: { width: 0, height: 2 },
+    // shadowOpacity: 0.8,
+    // shadowRadius: 2,
+    // elevation: 5,
+    // margin: 2.5,
   },
   tabTitle: {
     fontSize: 20,
