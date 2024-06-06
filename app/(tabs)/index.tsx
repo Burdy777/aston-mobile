@@ -99,13 +99,13 @@ const styles = StyleSheet.create({
   },
   tabContainer: {
     flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-around',
-    width: '100%',
+    // flexWrap: 'wrap',
+    justifyContent: 'space-between',
+    // width: '100%',
     marginTop: 20,
   },
   tab: {
-    width: '45%',
+    width: '44%',
     backgroundColor: '#fff',
     padding: 10,
     borderRadius: 10,

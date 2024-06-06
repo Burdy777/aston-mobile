@@ -10,8 +10,8 @@ export default function LoginScreen() {
   const navigation = useNavigation();
   const router = useRouter();
 
-    const [email, setEmail] = useState('toto123@gmail.com');
-  const [password, setPassword] = useState('toto123456');
+    const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
   const handleLogin = () => {
     if (!email || !password) {

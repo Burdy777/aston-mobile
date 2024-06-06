@@ -6,4 +6,5 @@ export interface Destination {
     prix:string;
     date_depart:string;
     date_retour:string;
+    vols:any
 }

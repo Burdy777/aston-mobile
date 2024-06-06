@@ -1,18 +1,34 @@
 import { View, Text, Image, Button, StyleSheet, ScrollView } from 'react-native';
 import * as React from 'react';
 import  { useEffect, useState } from 'react'
+import  AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { Link, useLocalSearchParams } from 'expo-router';
 import { useRouter } from 'expo-router'
+import { Destination } from './model/destination';
 
 export default function DetailsScreen() {
 const params = useLocalSearchParams()
 console.log(params.id)
+const router = useRouter();
 
-const [data, setData] = useState([]);
+const [data, setData] = useState(undefined);
+
+const testAcess = async () => {
+const accessToken =await AsyncStorage.getItem('accessToken');
+if(accessToken) {
+  alert(accessToken)
+  router.push('/paiement')
+} else {
+  alert('Veuillez vous connectez Afin de passez au paiement')
+  router.push('/connexion')
+}
+}
+
+
 
   useEffect(() => { 
-    if(!data.length) {
+    if(!data) {
 
     
 fetch('https://backend-astonvoyage.vercel.app/api/destination/getDest/'+params.id)
@@ -25,6 +41,7 @@ fetch('https://backend-astonvoyage.vercel.app/api/destination/getDest/'+params.i
       })
       .then((data) => {
          setData(data)
+         console.log(data)
 
         // Gérer la réponse de l'API, par exemple stocker le token JWT
     
@@ -35,8 +52,9 @@ fetch('https://backend-astonvoyage.vercel.app/api/destination/getDest/'+params.i
     }
 });
 
-{
+if (data){
   return (
+  
     <View style={styles.detailsContainer}>
       <Text style={styles.detailsTitle}>{data.nom_destination}</Text>
       <Image
@@ -48,14 +66,17 @@ fetch('https://backend-astonvoyage.vercel.app/api/destination/getDest/'+params.i
       <Text style={styles.detailsText}>Date de retour: {data.date_retour }</Text>
       <Text style={styles.detailsText}>Lieu: {data.nom_destination}</Text>
       <Text style={styles.detailsText}>Prix: {data.prix}</Text>
-      <Text style={styles.detailsText}>Aéroport de départ: {data.vols.aeroport_depart}</Text>
-      <Text style={styles.detailsText}>Aéroport d'arrivée: {data.vols.aeroport_arrivee}</Text>
+      <Text style={styles.detailsText}>Aéroport de départ: {data?.vols.aeroport_depart}</Text>
+      <Text style={styles.detailsText}>Aéroport d'arrivée: {data?.vols.aeroport_arrivee}</Text>
 
-      <Link style={styles.detailsPaiement} href={"/paiement"}>Passez au Paiement !</Link>
+      <Button color={'white'} title='Passez au Paiement !'  onPress={testAcess}/>
     </View>
+    
 
   );
 }
+  
+
 }
 
 const styles = StyleSheet.create({
