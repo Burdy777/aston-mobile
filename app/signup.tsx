@@ -1,15 +1,16 @@
-import { Image, StyleSheet, Platform } from 'react-native';
+import { Image, StyleSheet, Platform, Dimensions } from 'react-native';
 import React, { useState } from 'react';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { View, Text, TextInput, Button, Alert, } from 'react-native';
+import { View, Text, TextInput, Button, Alert, ScrollView } from 'react-native';
 
 import { Link } from 'expo-router';
 import { useRouter } from 'expo-router'
+import { Colors } from '@/constants/Colors';
 
 export default function InscriptionScreen() {
 
-    const router = useRouter();
-    const [email, setEmail] = useState('');
+  const router = useRouter();
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState();
   const [nom, setNom] = useState('');
   const [prenom, setPrenom] = useState('');
@@ -25,7 +26,7 @@ export default function InscriptionScreen() {
       return;
     }
 
-     // Validation de l'email
+    // Validation de l'email
     if (!email.includes('@') || !email.includes('.')) {
       Alert.alert('Erreur', 'Adresse e-mail invalide');
       return;
@@ -66,95 +67,108 @@ export default function InscriptionScreen() {
     }
   };
 
-    return (
+  return (
 
-<View style={styles.container}>
-        <Image style={styles.img} source={require('./../assets/images/logo.png')}/>
-      <Text style={styles.title}>Inscription</Text>
+    <ScrollView>
+      <View style={styles.container}>
+        <Image style={styles.img} source={require('./../assets/images/logo.png')} />
+        <Text style={styles.title}>Inscription</Text>
+      <View style={styles.containerInput}>
+        <Text style={styles.libelInput}>Nom:</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="ex:Doe"
+          placeholderTextColor={'#8C52FF'}
+          value={nom}
+          onChangeText={setNom}
+        />
+        </View>
+      <View style={styles.containerInput}>
+        <Text style={styles.libelInput}>Prenom:</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="ex:John"
+          placeholderTextColor={'#8C52FF'}
+          value={prenom}
+          onChangeText={setPrenom}
+        />
+        </View>
+      <View style={styles.containerInput}>
+        <Text style={styles.libelInput}>Adresse mail:</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="ex: toto@exemple.com"
+          placeholderTextColor={'#8C52FF'}
+          value={email}
+          onChangeText={setEmail}
+        />
+        </View>
+      <View style={styles.containerInput}>
+        <Text style={styles.libelInput}>Mot de passe:</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="ex: ********"
+          value={password}
+          onChangeText={setPassword}
+          placeholderTextColor={'#8C52FF'}
+          secureTextEntry
+        />
+        <Text style={styles.instructInput}>*8 Caractères min</Text>
+        </View>
 
-<Text style={styles.libelInput}>Nom:</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="ex:Doe"
-        placeholderTextColor={'#8C52FF'}
-        value={nom}
-        onChangeText={setNom}
-        keyboardType="email-address"
-        autoCapitalize="none"
-      />
-
-<Text style={styles.libelInput}>Prenom:</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="ex:John"
-        placeholderTextColor={'#8C52FF'}
-        value={prenom}
-        onChangeText={setPrenom}
-        keyboardType="email-address"
-        autoCapitalize="none"
-      />
-
-      <Text style={styles.libelInput}>Adresse mail:</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="ex: toto@exemple.com"
-        placeholderTextColor={'#8C52FF'}
-        value={email}
-        onChangeText={setEmail}
-        keyboardType="email-address"
-        autoCapitalize="none"
-      />
-
-    <Text style={styles.libelInput}>Mot de passe:</Text> 
-      <TextInput
-        style={styles.input}
-        placeholder="ex: ********"
-        placeholderTextColor={'#8C52FF'}
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry
-      />
-       <Text style={styles.instructInput}>(8 carac min)</Text>
-
-<Text style={styles.libelInput}>Confirmer votre mot de passe:</Text> 
-      <TextInput
-        style={styles.input}
-        placeholder="ex: ********"
-        placeholderTextColor={'#8C52FF'}
-        value={confirmPassword}
-        onChangeText={setConfirmPassword}
-        secureTextEntry
-      />
-      <Button title="Inscription" onPress={handleSignUp} />
-      <Link style={styles.subtitle} href="/signin">Déjà inscrit? Connectez-vous</Link>
-    </View>
-    );
+      <View style={styles.containerInput}>
+        <Text style={styles.libelInput}>Confirmer votre mot de passe:</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="ex: ********"
+          placeholderTextColor={'#8C52FF'}
+          value={confirmPassword}
+          onChangeText={setConfirmPassword}
+          secureTextEntry
+        />
+        </View>
+        <View style={styles.buttonContainer}>
+        <Button 
+        title="Inscription" 
+        color={Colors.purpleTheme}
+        onPress={handleSignUp} />
+        </View>
+        <View style={styles.buttonContainer}>
+        <Link style={styles.subtitle} href="/signin">Déjà inscrit? Connectez-vous</Link>
+        </View>
+      </View>
+    </ScrollView>
+  );
 }
 
 const styles = StyleSheet.create({
-     container: {
+   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingHorizontal: 16,
+    justifyContent:'center',
+    alignItems:'center',
      backgroundColor: '#8C52FF',
+     paddingVertical: 10,
+  },
+  containerInput: {
+    width: '100%',
+    marginLeft: Dimensions.get('screen').width / 5,
+    marginBottom:20,
   },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
-    textAlign: 'center',
-    marginBottom: 24,
-    color: 'white',
+    marginBottom: 20,
+    color: Colors.orangeTheme,
 
   },
   input: {
     height: 40,
     borderWidth: 1,
-    marginBottom: 12,
     paddingHorizontal: 8,
     borderColor: '#8C52FF',
     backgroundColor: 'white',
     width: '80%',
+    paddingVertical:10
   },
   subtitle:{
     fontSize: 16,
@@ -162,18 +176,24 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   img:{
-    width: 250,
-    height: 250,
-    marginBottom: -25,
+    width: 200,
+    height: 200,
+    marginTop: 30,
   },
   libelInput:{
     fontWeight: 'bold',
     color: 'white',
-    textAlign:'left'
   },
   instructInput:{
-    fontWeight: '200',
+    fontWeight: '700',
+    fontSize:15,
+    color: Colors.orangeTheme,
+
   },
+  buttonContainer: {
+    marginBottom:30,
+    width:250
+  }
 });
 
 

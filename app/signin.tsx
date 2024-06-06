@@ -1,10 +1,11 @@
-import { Image, StyleSheet, Platform } from 'react-native';
+import { Image, StyleSheet, Platform, ScrollView, Dimensions } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { View, Text, TextInput, Button, Alert, } from 'react-native';
 import { Link, useNavigation } from 'expo-router';
 import { useRouter } from 'expo-router'
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Colors } from '@/constants/Colors';
 
 export default function LoginScreen() {
   const navigation = useNavigation();
@@ -75,10 +76,12 @@ export default function LoginScreen() {
     const newLocal = '';
 
     return (
+
+    <ScrollView>
     <View style={styles.container}>
         <Image style={styles.img} source={require('./../assets/images/logo.png')}/>
       <Text style={styles.title}>Connexion</Text>
-
+      <View style={styles.containerInput}>
       <Text style={styles.libelInput}>Adresse mail:</Text>  
       <TextInput
         style={styles.input}
@@ -89,7 +92,8 @@ export default function LoginScreen() {
         keyboardType="email-address"
         autoCapitalize="none"
       />
-
+      </View>
+      <View style={styles.containerInput}>
       <Text style={styles.libelInput}>Mot de passe:</Text>  
       <TextInput
         style={styles.input}
@@ -100,55 +104,72 @@ export default function LoginScreen() {
         secureTextEntry={true}
       />
       <Text style={styles.instructInput}>(8 carac min)</Text>
-
-      <Button title="Se connecter" onPress={handleLogin} />
+      </View>
+      <View style={styles.buttonContainer}>
+      <Button title="Se connecter"
+       onPress={handleLogin} 
+       />
+      </View>
+      <View style={styles.buttonContainer}>
       <Link style={styles.subtitle} href={"/signup"}>Pas encore de compte? Inscrivez-vous</Link>
+      </View>
     </View>
+    </ScrollView>
     );
   }
 
 const styles = StyleSheet.create({
      container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingHorizontal: 16,
-    backgroundColor: '#8C52FF',
+    justifyContent:'center',
+    alignItems:'center',
+     backgroundColor: '#8C52FF',
+     paddingVertical: 120,
+  },
+  containerInput: {
+    width: '100%',
+    marginLeft: Dimensions.get('screen').width / 5,
+    marginBottom: 20
   },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
-    textAlign: 'center',
-    color: 'white',
-    marginBottom: 24,
+    marginBottom: 20,
+    color: Colors.orangeTheme,
+
   },
   input: {
     height: 40,
     borderWidth: 1,
-    marginBottom: 12,
     paddingHorizontal: 8,
     borderColor: '#8C52FF',
     backgroundColor: 'white',
     width: '80%',
-
-  },
-  img:{
-    width: 250,
-    height: 250,
-    marginBottom: -25,
+    paddingVertical:10
   },
   subtitle:{
-    fontSize: 16,
+    fontSize: 13,
     color: 'white',
     textAlign: 'center',
+  },
+  img:{
+    width: 200,
+    height: 200,
+    marginTop: 30,
   },
   libelInput:{
     fontWeight: 'bold',
     color: 'white',
-    textAlign:'left'
   },
   instructInput:{
-    fontWeight: '200',
+    fontWeight: '700',
+    fontSize:15,
+    color: Colors.orangeTheme,
+
   },
+  buttonContainer: {
+    marginBottom:30,
+    width:250
+  }
 });
 
