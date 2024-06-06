@@ -5,12 +5,20 @@ import { Link } from 'expo-router';
 import { useRouter } from 'expo-router'
 import { Destination } from '../model/destination';
 import { BASE_URL } from '@/constants/Url';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const index = () => {
 
 const [data, setData] = useState([]);
+ const [token, setToken] = useState(null);
 
+async function getToken () {
+  const token =await AsyncStorage.getItem('accessToken');
+ setToken(token) 
+}
   useEffect(() => { 
+    
+getToken()
     if(!data.length) {
 
     
@@ -37,9 +45,8 @@ return (
 
     <ScrollView contentContainerStyle={styles.container}>
 
-      
-     <Link style={styles.subtitle} href="signin">Se connecter</Link>
-     <Link style={styles.subtitle} href="signup">S'inscrire</Link>
+
+     <Link style={styles.subtitle} href="signin">{token ?"Déconnexion":"Se connecter"}</Link>
 
       <Text style={styles.title}>Bienvenue chez AstonVoyage </Text>
       <Text style={styles.subtitle}>Voici nos voyages Disponible:</Text>
@@ -92,7 +99,7 @@ const styles = StyleSheet.create({
   subtitle: {
     fontSize: 18,
     color: 'white',
-    marginVertical: 5,
+    marginTop: 20,
   },
   btn: {
     fontSize: 18,

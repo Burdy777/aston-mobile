@@ -10,14 +10,30 @@ export default function InscriptionScreen() {
 
     const router = useRouter();
     const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [password, setPassword] = useState();
   const [nom, setNom] = useState('');
   const [prenom, setPrenom] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState();
 
   const handleSignUp = async () => {
+    if (!email || !password || !confirmPassword) {
+      Alert.alert('Erreur', 'Veuillez remplir tous les champs.');
+      return;
+    }
     if (password !== confirmPassword) {
       Alert.alert('Les mot de passe ne se ressemble pas', 'Please make sure your passwords match');
+      return;
+    }
+
+     // Validation de l'email
+    if (!email.includes('@') || !email.includes('.')) {
+      Alert.alert('Erreur', 'Adresse e-mail invalide');
+      return;
+    }
+
+    // Validation du mot de passe
+    if (password.length < 8) {
+      Alert.alert('Erreur', 'Mot de passe doit contenir au moins 8 caractères');
       return;
     }
 
@@ -55,44 +71,55 @@ export default function InscriptionScreen() {
 <View style={styles.container}>
         <Image style={styles.img} source={require('./../assets/images/logo.png')}/>
       <Text style={styles.title}>Inscription</Text>
+
+<Text style={styles.libelInput}>Nom:</Text>
       <TextInput
         style={styles.input}
-        placeholder="nom"
+        placeholder="ex:Doe"
         placeholderTextColor={'#8C52FF'}
         value={nom}
         onChangeText={setNom}
         keyboardType="email-address"
         autoCapitalize="none"
       />
+
+<Text style={styles.libelInput}>Prenom:</Text>
       <TextInput
         style={styles.input}
-        placeholder="prenom"
+        placeholder="ex:John"
         placeholderTextColor={'#8C52FF'}
         value={prenom}
         onChangeText={setPrenom}
         keyboardType="email-address"
         autoCapitalize="none"
       />
+
+      <Text style={styles.libelInput}>Adresse mail:</Text>
       <TextInput
         style={styles.input}
-        placeholder="Email"
+        placeholder="ex: toto@exemple.com"
         placeholderTextColor={'#8C52FF'}
         value={email}
         onChangeText={setEmail}
         keyboardType="email-address"
         autoCapitalize="none"
       />
+
+    <Text style={styles.libelInput}>Mot de passe:</Text> 
       <TextInput
         style={styles.input}
-        placeholder="Mot de passe"
+        placeholder="ex: ********"
         placeholderTextColor={'#8C52FF'}
         value={password}
         onChangeText={setPassword}
         secureTextEntry
       />
+       <Text style={styles.instructInput}>(8 carac min)</Text>
+
+<Text style={styles.libelInput}>Confirmer votre mot de passe:</Text> 
       <TextInput
         style={styles.input}
-        placeholder="Confirmer le mot de passe"
+        placeholder="ex: ********"
         placeholderTextColor={'#8C52FF'}
         value={confirmPassword}
         onChangeText={setConfirmPassword}
@@ -138,6 +165,14 @@ const styles = StyleSheet.create({
     width: 250,
     height: 250,
     marginBottom: -25,
+  },
+  libelInput:{
+    fontWeight: 'bold',
+    color: 'white',
+    textAlign:'left'
+  },
+  instructInput:{
+    fontWeight: '200',
   },
 });
 

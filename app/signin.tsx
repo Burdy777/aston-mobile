@@ -1,5 +1,5 @@
 import { Image, StyleSheet, Platform } from 'react-native';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { View, Text, TextInput, Button, Alert, } from 'react-native';
 import { Link, useNavigation } from 'expo-router';
@@ -19,7 +19,18 @@ export default function LoginScreen() {
       return;
     }
 
-    fetch('https://backend-astonvoyage.vercel.app/api/user/authenticate', {
+     // Validation de l'email
+    if (!email.includes('@') || !email.includes('.')) {
+      Alert.alert('Erreur', 'Adresse e-mail invalide');
+      return;
+    }
+
+    // Validation du mot de passe
+    if (password.length < 8) {
+      Alert.alert('Erreur', 'Mot de passe doit contenir au moins 8 caractères');
+      return;
+    }
+       fetch('https://backend-astonvoyage.vercel.app/api/user/authenticate', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -44,46 +55,57 @@ export default function LoginScreen() {
          await AsyncStorage.setItem('prenom', data.user.nom);
          await AsyncStorage.setItem('mail', data.user.mail);
          await AsyncStorage.setItem('userId', data.user._id);
-         router.push('')
+         router.push('(tabs)');
+
         } catch (error) {
-      console.error('erreur', error);
+      console.error('erreur OKOK', error);
         }
       })
       .catch((error) => {
         console.error('NVEL Erreur:', error);
         Alert.alert('Erreur', 'Erreur de connexion.');
       });
-   
-  };
+    };
 
+    // Si toutes les validations passent, vous pouvez naviguer vers la page suivante
+  
+
+ 
+ 
     const newLocal = '';
+
     return (
     <View style={styles.container}>
         <Image style={styles.img} source={require('./../assets/images/logo.png')}/>
       <Text style={styles.title}>Connexion</Text>
+
+      <Text style={styles.libelInput}>Adresse mail:</Text>  
       <TextInput
         style={styles.input}
-        placeholder="Email"
+        placeholder="ex: toto@exemple.com"
         placeholderTextColor={'#8C52FF'}
         value={email}
         onChangeText={setEmail}
         keyboardType="email-address"
         autoCapitalize="none"
       />
+
+      <Text style={styles.libelInput}>Mot de passe:</Text>  
       <TextInput
         style={styles.input}
-        placeholder="Mot de passe"
+        placeholder="ex: ********"
         placeholderTextColor={'#8C52FF'}
         value={password}
         onChangeText={setPassword}
-        secureTextEntry
+        secureTextEntry={true}
       />
+      <Text style={styles.instructInput}>(8 carac min)</Text>
+
       <Button title="Se connecter" onPress={handleLogin} />
       <Link style={styles.subtitle} href={"/signup"}>Pas encore de compte? Inscrivez-vous</Link>
     </View>
-
     );
-}
+  }
 
 const styles = StyleSheet.create({
      container: {
@@ -119,5 +141,14 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: 'white',
     textAlign: 'center',
-  }
+  },
+  libelInput:{
+    fontWeight: 'bold',
+    color: 'white',
+    textAlign:'left'
+  },
+  instructInput:{
+    fontWeight: '200',
+  },
 });
+
