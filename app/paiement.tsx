@@ -2,23 +2,24 @@ import { router } from 'expo-router';
 import { Image, StyleSheet, Platform } from 'react-native';
 import React, { useState } from 'react';
 import { View, TextInput, Button, Alert,Text } from 'react-native';
-
+import { Dimensions, ScrollView } from 'react-native'
+import { Colors } from '@/constants/Colors';
 export default function PaiementScreen() {
 
   const [nom, setNom] = useState('');
   const [prenom, setPrenom] = useState('');
-  const [numeroCarte, setNumeroCarte] = useState('');
-  const [cryptogramme, setCryptogramme] = useState('');
+  const [numeroCarte, setNumeroCarte] = useState(0);
+  const [cryptogramme, setCryptogramme] = useState();
   const [dateExpiration, setDateExpiration] = useState('');
 
   const validateFields = () => {
-    if (nom === '' || prenom === '' || numeroCarte === '' || cryptogramme === '' || dateExpiration === '') {
+    if (nom === '' || prenom === '' || !numeroCarte.toString().length  || cryptogramme === '' || dateExpiration === '') {
       Alert.alert('Erreur', 'Veuillez remplir tous les champs');
       return;
     }
 
     // Validation du numéro de carte
-    if (numeroCarte.length !== 16 || isNaN(numeroCarte)) {
+    if (numeroCarte.toString().length !== 16 || isNaN(numeroCarte)) {
       Alert.alert('Erreur', 'Numéro de carte invalide');
       return;
     }
@@ -31,7 +32,12 @@ export default function PaiementScreen() {
 
     // Validation de la date d'expiration
     // Vous pouvez implémenter une validation plus précise en fonction de vos besoins
-    if (dateExpiration.length !== 5 || !dateExpiration.includes('/')) {
+    const month = dateExpiration.split("/")[0]
+    const year = dateExpiration.split("/")[1]
+    console.log(month, year)
+
+
+    if (dateExpiration.length !== 5 || !dateExpiration.includes('/') ) {
       Alert.alert('Erreur', 'Date d\'expiration invalide');
       return;
     }
@@ -42,10 +48,11 @@ export default function PaiementScreen() {
 
   return (
 
-    <View style={styles.container}>
+    <ScrollView >
+      <View style={styles.container}>
         <Image style={styles.img} source={require('./../assets/images/logo.png')}/>
-        <Text style={styles.title}>Paiement</Text>
-
+        <Text style={styles.title}>Laissez votre routine derrière ! </Text>
+      <View style={styles.containerInput}>
       <Text style={styles.libelInput}>Nom:</Text>  
       <TextInput
       style={styles.input}
@@ -54,6 +61,10 @@ export default function PaiementScreen() {
         onChangeText={setNom}
         placeholderTextColor={'#8C52FF'}
       />
+      </View>
+
+       
+      <View style={styles.containerInput}>
       <Text style={styles.libelInput}>Prénom:</Text>
       <TextInput
       style={styles.input}
@@ -62,69 +73,82 @@ export default function PaiementScreen() {
         onChangeText={setPrenom}
         placeholderTextColor={'#8C52FF'}
       />
+      </View>
+      <View style={styles.containerInput}>
       <Text style={styles.libelInput}>Numéro de carte:</Text>  
       <TextInput
       style={styles.input}
-        placeholder="ex: 1234123412341234"
+        placeholder="ex: 1334169412310414"
         value={numeroCarte}
         onChangeText={setNumeroCarte}
         keyboardType="numeric"
+        maxLength={16}
         placeholderTextColor={'#8C52FF'}
       />
-      <Text style={styles.instructInput}>(16 carac)</Text>
-      
+      <Text style={styles.instructInput}>*16 Caractères</Text>
+      </View>
+      <View style={styles.containerInput}>
       <Text style={styles.libelInput}>Cryptogramme:(CSV)</Text>
       <TextInput
       style={styles.input}
         placeholder="ex: 123"
         value={cryptogramme}
+        maxLength={3}
         onChangeText={setCryptogramme}
         keyboardType="numeric"
         placeholderTextColor={'#8C52FF'}
-        textAlign='center'
       />
+      </View>
+      <View style={styles.containerInput}>
       <Text style={styles.libelInput}>Date d'expiration (MM/YY):</Text>
       <TextInput
-      style={styles.input}
-        placeholder="ex: MM/YY"
+        style={styles.input}
+        placeholder="ex: 06/26"
         value={dateExpiration}
         onChangeText={setDateExpiration}
-        keyboardType="numeric"
         placeholderTextColor={'#8C52FF'}
       />
-      <Button
+      </View>
+      <View style={styles.buttonContainer}>
+        <Button
         title="Payer"
-        color={'white'}
+        color={Colors.purpleTheme}
         onPress={validateFields}
       />
-    </View>
+      </View>
+      
+      </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
      container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingHorizontal: 16,
+    justifyContent:'center',
+    alignItems:'center',
      backgroundColor: '#8C52FF',
+  },
+  containerInput: {
+    width: '100%',
+    marginLeft: Dimensions.get('screen').width / 5,
+    marginBottom:30
   },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
-    textAlign: 'center',
     marginBottom: 24,
-    color: 'white',
+    color: Colors.orangeTheme,
 
   },
   input: {
     height: 40,
     borderWidth: 1,
-    marginBottom: 12,
     paddingHorizontal: 8,
     borderColor: '#8C52FF',
     backgroundColor: 'white',
     width: '80%',
+    paddingVertical:10
   },
   subtitle:{
     fontSize: 16,
@@ -132,18 +156,24 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   img:{
-    width: 250,
-    height: 250,
-    marginBottom: -25,
+    width: 200,
+    height: 200,
+    marginTop: 30,
   },
   libelInput:{
     fontWeight: 'bold',
     color: 'white',
-    textAlign:'left'
   },
   instructInput:{
-    fontWeight: '200',
+    fontWeight: '700',
+    fontSize:15,
+    color: Colors.orangeTheme,
+
   },
+  buttonContainer: {
+    marginBottom:30,
+    width:250
+  }
 });
 
 

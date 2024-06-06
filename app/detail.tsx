@@ -10,15 +10,13 @@ import { transformDate } from './utils/date';
 
 export default function DetailsScreen() {
 const params = useLocalSearchParams()
-console.log(params.id)
 const router = useRouter();
 
 const [data, setData] = useState(undefined);
 
 const isConnected = async () => {
-const accessToken =await AsyncStorage.getItem('accessToken');
+const accessToken = await AsyncStorage.getItem('accessToken');
 if(accessToken) {
-  alert(accessToken)
   router.push('/paiement')
 } else {
   alert('Veuillez vous connecter avant de reserver')
@@ -65,7 +63,7 @@ if (data){
       <Text style={styles.detailsText}><Text style={styles.type}>Aéroport d'arrivée:</Text> {data?.vols.aeroport_arrivee}</Text>
 
       <View style={styles.containerButton}>
-      <Button color={'#714aff'} title='Passez au paiement !'  onPress={isConnected}/>
+      <Button color={Colors.purpleTheme} title='Passez au paiement !'  onPress={isConnected}/>
       </View>
     </View>
   );
@@ -116,6 +114,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   containerButton: {
-    marginTop:20
+    marginTop:20,
+    width:250
   }
 });
