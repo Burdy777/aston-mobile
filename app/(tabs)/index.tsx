@@ -1,8 +1,6 @@
 import { View, Text, Image, Button, StyleSheet, ScrollView } from 'react-native';
 import React, { useEffect, useState } from 'react'
-import UseEffect from 'react-native';
 import { Link, router } from 'expo-router';
-import { useRouter } from 'expo-router'
 import { Destination } from '../model/destination';
 import { BASE_URL } from '@/constants/Url';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -43,12 +41,15 @@ fetch('https://backend-astonvoyage.vercel.app/api/destination/getAllDest')
     }
 });
 
-const navigate = ()=> {
-  console.log(token)
+const navigate = async ()=> {
   if(token) {
+    try{
+         await fetch('https://backend-astonvoyage.vercel.app/api/destination/logoutUser')
     AsyncStorage.clear();
     router.push('(tabs)')
-
+    } catch(e) {
+      console.log('errue logout',e)
+    }
 
   }
   router.push('signin')
@@ -58,9 +59,9 @@ return (
 
     <ScrollView contentContainerStyle={styles.container}>
 
-
+    <View style={styles.containerCnx}>
      <Button title={token ?"Déconnexion":"Se connecter"} color={Colors.purpleTheme}onPress={navigate}  />
-
+</View>
       <Text style={styles.title}>Bienvenue chez AstonVoyage </Text>
       <Text style={styles.subtitle}>Voici nos voyages Disponible:</Text>
 
@@ -90,7 +91,6 @@ data.map((el:Destination) => {
 
 })
 }
-      
     </ScrollView>
 
 );
@@ -103,6 +103,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#8C52FF',
     padding: 20,
+  },
+  containerCnx: {
+    marginTop:50
   },
   title: {
     fontSize: 24,
