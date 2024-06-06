@@ -1,3 +1,5 @@
+import { Vols } from "./vols";
+
 export interface Destination {
     _id:string;
     nom_destination:string;
@@ -6,5 +8,5 @@ export interface Destination {
     prix:string;
     date_depart:string;
     date_retour:string;
-    vols:any
+    vols: Vols;
 }

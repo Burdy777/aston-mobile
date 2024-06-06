@@ -7,6 +7,7 @@ import { View, Text, Button, ScrollView } from 'react-native';
 import  AsyncStorage from '@react-native-async-storage/async-storage';
 import { Destination } from '../model/destination';
 import { BASE_URL } from '@/constants/Url';
+import { transformDate } from '../utils/date';
 
 export default function TabTwoScreen() {
 
@@ -53,24 +54,27 @@ fetch('https://backend-astonvoyage.vercel.app/api/booking/getAllBook/'+userId)
       <Text style={styles.subtitle}>Voici les voyages que vous avez reservé:</Text>
 
 {
-data.map((el:Destination) => {
+data.map((el:any) => {
   console.log(el._id)
  return (
 
 <View style={styles.tabContainer}>
         <View style={styles.tab}>
-          <Text style={styles.tabTitle}>{el.nom_destination}</Text>
+          <Text style={styles.tabTitle}>{el.destinationId.nom_destination}</Text>
           <Image
-            source={{ uri: BASE_URL + '/destination/download/'+el.image }}
+            source={{ uri: BASE_URL + '/destination/download/'+el.destinationId.image }}
             style={styles.image}
           />
-          <Text style={styles.description}>
-            {el.description}
-          </Text>
-          <Link style={styles.btn} href={{
-            pathname:'/detail',
-            params:{id:el._id}
-          }}>Voir détails</Link>
+          {/* <Text style={styles.description}>
+            {el.destinationId.description}
+          </Text> */}
+      <Text style={styles.descriptiontitle}>Date du grand départ:</Text>
+         <Text style={styles.descriptionsubtitle}>{transformDate(el.destinationId.date_depart,'DD-MM-YYYY')}</Text>
+         <Text style={styles.descriptiontitle}>Date du triste retour:</Text>
+         <Text style={styles.descriptionsubtitle}>{ transformDate(el.destinationId.date_retour,'DD-MM-YYYY') }</Text>
+
+    
+          
         </View>
 
       </View>
@@ -115,7 +119,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   tab: {
-    width: '44%',
+    width: '50%',
     backgroundColor: '#fff',
     padding: 10,
     borderRadius: 10,
@@ -142,5 +146,10 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginBottom: 10,
   },
-//   
+  descriptiontitle:  {
+  fontWeight: 'bold',
+},
+  descriptionsubtitle: {
+    color:'#8C52FF',
+  },
 });
