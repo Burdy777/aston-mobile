@@ -18,12 +18,16 @@ const [data, setData] = useState([]);
 
 
 useEffect(() => { 
+  
+    getDetail()
+});
+
   const getDetail =async () => {
       const userId =await AsyncStorage.getItem('userId');
+      console.log('USERID',userId)
      if (data.length ==0) {
 fetch('https://backend-astonvoyage.vercel.app/api/booking/getAllBook/'+userId)
       .then( (response) => {
-        console.log(response)
         if (!response.ok) {
           throw new Error('Erreur de connexion');
         }
@@ -31,6 +35,7 @@ fetch('https://backend-astonvoyage.vercel.app/api/booking/getAllBook/'+userId)
       })
       .then((data) => {
         setData(data)
+        console.log('MEEEEEE',data)
 
         // Gérer la réponse de l'API, par exemple stocker le token JWT
     
@@ -40,10 +45,7 @@ fetch('https://backend-astonvoyage.vercel.app/api/booking/getAllBook/'+userId)
       });
 } 
     }
-    getDetail()
-});
-
-  return (
+    return (
 
     <ScrollView contentContainerStyle={styles.container}>
 

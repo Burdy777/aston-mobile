@@ -1,16 +1,33 @@
-import { router } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import { Image, StyleSheet, Platform } from 'react-native';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, TextInput, Button, Alert,Text } from 'react-native';
 import { Dimensions, ScrollView } from 'react-native'
 import { Colors } from '@/constants/Colors';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 export default function PaiementScreen() {
+  const params = useLocalSearchParams()
 
   const [nom, setNom] = useState('');
   const [prenom, setPrenom] = useState('');
   const [numeroCarte, setNumeroCarte] = useState(0);
   const [cryptogramme, setCryptogramme] = useState();
   const [dateExpiration, setDateExpiration] = useState('');
+  const [userId, setUserId] = useState('');
+
+  let token:any;
+
+  useEffect(()=> {
+    if(!token || !userId) {
+      getDataStorage()
+    }
+  },[])
+
+  async function getDataStorage () {
+    token = await AsyncStorage.getItem('accessToken');
+    const userId = await AsyncStorage.getItem('userId');
+    setUserId(userId)
+  }
 
   const validateFields = () => {
     if (nom === '' || prenom === '' || !numeroCarte.toString().length  || cryptogramme === '' || dateExpiration === '') {
@@ -41,9 +58,27 @@ export default function PaiementScreen() {
       Alert.alert('Erreur', 'Date d\'expiration invalide');
       return;
     }
-
+    console.log('useId bro',userId,
+      params.id);
+    
     // Si toutes les validations passent, vous pouvez naviguer vers la page suivante
-    router.push('(tabs)/reservations');
+    fetch('https://backend-astonvoyage.vercel.app/api/booking/myBook',{
+      method:'POST',
+      body: JSON.stringify({
+        userId,
+        destinationId:params.id
+      
+      }),
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+    }).then(()=> {
+      router.push('(tabs)/reservations');
+
+    }).catch(e=> {
+      console.log(e, 'error')
+    })
   };
 
   return (

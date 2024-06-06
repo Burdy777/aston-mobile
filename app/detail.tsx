@@ -17,7 +17,7 @@ const [data, setData] = useState(undefined);
 const isConnected = async () => {
 const accessToken = await AsyncStorage.getItem('accessToken');
 if(accessToken) {
-  router.push('/paiement')
+  router.push({pathname:'paiement', params:{id:params.id}})
 } else {
   alert('Veuillez vous connecter avant de reserver')
   router.push('/signin')

@@ -1,11 +1,12 @@
 import { View, Text, Image, Button, StyleSheet, ScrollView } from 'react-native';
 import React, { useEffect, useState } from 'react'
 import UseEffect from 'react-native';
-import { Link } from 'expo-router';
+import { Link, router } from 'expo-router';
 import { useRouter } from 'expo-router'
 import { Destination } from '../model/destination';
 import { BASE_URL } from '@/constants/Url';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Colors } from '@/constants/Colors';
 
 const index = () => {
 
@@ -18,7 +19,8 @@ async function getToken () {
 }
   useEffect(() => { 
     
-getToken()
+getToken();
+console.log(token)
     if(!data.length) {
 
     
@@ -41,12 +43,23 @@ fetch('https://backend-astonvoyage.vercel.app/api/destination/getAllDest')
     }
 });
 
+const navigate = ()=> {
+  console.log(token)
+  if(token) {
+    AsyncStorage.clear();
+    router.push('(tabs)')
+
+
+  }
+  router.push('signin')
+}
+
 return (
 
     <ScrollView contentContainerStyle={styles.container}>
 
 
-     <Link style={styles.subtitle} href="signin">{token ?"Déconnexion":"Se connecter"}</Link>
+     <Button title={token ?"Déconnexion":"Se connecter"} color={Colors.purpleTheme}onPress={navigate}  />
 
       <Text style={styles.title}>Bienvenue chez AstonVoyage </Text>
       <Text style={styles.subtitle}>Voici nos voyages Disponible:</Text>
