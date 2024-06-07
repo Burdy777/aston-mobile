@@ -1,29 +1,75 @@
-import { View, Text, Image, Button, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, Image, Button, StyleSheet } from 'react-native';
 import * as React from 'react';
+import  { useEffect, useState } from 'react'
+import  AsyncStorage from '@react-native-async-storage/async-storage';
 
-import { Link } from 'expo-router';
+import {  useLocalSearchParams } from 'expo-router';
 import { useRouter } from 'expo-router'
+import { Colors } from '@/constants/Colors';
+import { transformDate } from './utils/date';
 
 export default function DetailsScreen() {
-  return (
+const params = useLocalSearchParams()
+const router = useRouter();
 
+const [data, setData] = useState(undefined);
+
+const isConnected = async () => {
+const accessToken = await AsyncStorage.getItem('accessToken');
+if(accessToken) {
+  router.push({pathname:'paiement', params:{id:params.id}})
+} else {
+  alert('Veuillez vous connecter avant de reserver')
+  router.push('/signin')
+
+}
+}
+
+  useEffect(() => { 
+    if(!data) {
+fetch('https://backend-astonvoyage.vercel.app/api/destination/getDest/'+params.id)
+      .then((response) => {
+        console.log(response)
+        if (!response.ok) {
+          throw new Error('Erreur de connexion');
+        }
+        return response.json();
+      })
+      .then((data) => {
+         setData(data)
+         console.log(data)    
+      })
+      .catch((error) => {
+        console.error('NVEL Erreur:', error);
+      });
+    }
+});
+
+if (data){
+  return (
+  
     <View style={styles.detailsContainer}>
-      <Text style={styles.detailsTitle}>nom de la dest</Text>
+      <Text style={styles.detailsTitle}>{data.nom_destination}!</Text>
       <Image
-        source={{ uri: 'https://example.com/your-image-url1.jpg' }}
+        source={{ uri: 'https://backend-astonvoyage.vercel.app/api/destination/download/'+data.image }}
         style={styles.detailsImage}
       />
-      <Text style={styles.detailsDescription}>description</Text>
-      <Text style={styles.detailsText}>Date de départ: dateDepart</Text>
-      <Text style={styles.detailsText}>Date de retour: dateRetour</Text>
-      <Text style={styles.detailsText}>Lieu: lieu</Text>
-      <Text style={styles.detailsText}>Prix: prix</Text>
-      <Text style={styles.detailsText}>Aéroport de départ: aeroportDepart</Text>
-      <Text style={styles.detailsText}>Aéroport d'arrivée: aeroportArrivee</Text>
+      <Text style={styles.detailsDescription}>{data.description}</Text>
+      <Text style={styles.detailsText}><Text style={styles.type}>Date de départ:</Text> {transformDate(data.date_depart,'DD-MM-YYYY')}</Text>
+      <Text style={styles.detailsText}><Text style={styles.type}>Date de retour:</Text> { transformDate(data.date_retour,'DD-MM-YYYY') }</Text>
+      <Text style={styles.detailsText}><Text style={styles.type}>Lieu: {data.nom_destination}</Text></Text>
+      <Text style={styles.detailsText}><Text style={styles.type}>Prix:</Text> {data.prix} €</Text>
+      <Text style={styles.detailsText}><Text style={styles.type}>Aéroport de départ:</Text> {data?.vols.aeroport_depart}</Text>
+      <Text style={styles.detailsText}><Text style={styles.type}>Aéroport d'arrivée:</Text> {data?.vols.aeroport_arrivee}</Text>
 
-      <Link style={styles.detailsPaiement} href={"/paiement"}>Passez au Paiement !</Link>
+      <View style={styles.containerButton}>
+      <Button color={Colors.purpleTheme} title='Passez au paiement !'  onPress={isConnected}/>
+      </View>
     </View>
   );
+}
+  
+
 }
 
 const styles = StyleSheet.create({
@@ -37,7 +83,11 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     marginVertical: 10,
-    color: 'black',
+    color: Colors.orangeTheme,
+  },
+  type: {
+    fontWeight:'bold',
+    fontSize:20
   },
   detailsImage: {
     width: 200,
@@ -49,17 +99,22 @@ const styles = StyleSheet.create({
     fontSize: 16,
     textAlign: 'center',
     marginVertical: 10,
-    color: 'white',
+    color: Colors.orangeTheme,
   },
   detailsText: {
     fontSize: 16,
     marginVertical: 5,
-    color: 'white',
+    color: 'white'
+    
   },
   detailsPaiement:{
     fontSize: 16,
     color: 'black',
     fontWeight: 'bold',
     marginTop: 10,
+  },
+  containerButton: {
+    marginTop:20,
+    width:250
   }
 });

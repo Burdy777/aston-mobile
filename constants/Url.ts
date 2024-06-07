@@ -1,0 +1,1 @@
+export const BASE_URL = 'https://backend-astonvoyage.vercel.app/api'
